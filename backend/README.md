@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`POST /user/register`
+`POST /users/register`
 
 ---
 
@@ -100,7 +100,7 @@ Send a JSON object with the following structure:
 
 ## Endpoint
 
-`POST /user/login`
+`POST /users/login`
 
 ---
 
@@ -182,5 +182,75 @@ Send a JSON object with the following structure:
 
 - The `token` can be used for authenticated requests.
 - Make sure to provide valid credentials to receive a token.
+
+---
+
+# User Profile Endpoint Documentation
+
+## GET `/users/profile`
+
+**Description:**  
+Returns the authenticated user's profile information.
+
+**Authentication:**
+
+- Required.
+- Send JWT token in the `token` cookie or as an `Authorization: Bearer <token>` header.
+
+**Request Example:**
+
+- No body required.
+- Headers:
+  - `Cookie: token=<JWT>`
+  - or `Authorization: Bearer <JWT>`
+
+**Response:**
+
+- **200 OK**
+  ```json
+  {
+    "_id": "user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "socketId": "..."
+  }
+  ```
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized" }
+  ```
+
+---
+
+## GET `/users/logout`
+
+**Description:**  
+Logs out the authenticated user by blacklisting the token and clearing the cookie.
+
+**Authentication:**
+
+- Required.
+- Send JWT token in the `token` cookie or as an `Authorization: Bearer <token>` header.
+
+**Request Example:**
+
+- No body required.
+- Headers:
+  - `Cookie: token=<JWT>`
+  - or `Authorization: Bearer <JWT>`
+
+**Response:**
+
+- **200 OK**
+  ```json
+  { "message": "Logged Out." }
+  ```
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized" }
+  ```
 
 ---
