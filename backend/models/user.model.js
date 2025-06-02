@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -19,6 +20,7 @@ const userSchema = new mongoose.Schema({
             required: true,
             unique: true,
             minlength: [5, 'Email must be atleast 5 characters long'],
+            match: [emailRegex, 'Please enter a valid email address.']
     },
     password: {
             type: String,

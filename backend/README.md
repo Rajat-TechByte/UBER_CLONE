@@ -254,3 +254,97 @@ Logs out the authenticated user by blacklisting the token and clearing the cooki
   ```
 
 ---
+
+# Captain Endpoints Documentation
+
+---
+
+## Register Captain
+
+### `POST /captains/register`
+
+**Description:**  
+Registers a new captain in the system. On success, returns a JWT authentication token and the created captain object.
+
+**Request Body:**
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "yourPassword123",
+  "vehicle": {
+    "color": "red",
+    "plate": "MP 09 UT 1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+**Field Requirements:**
+- `fullname` (object, required)
+  - `firstname` (string, required, min 3 characters)
+  - `lastname` (string, optional, min 3 characters if provided)
+- `email` (string, required, must be a valid email, unique)
+- `password` (string, required, min 6 characters)
+- `vehicle` (object, required)
+  - `color` (string, required, min 3 characters)
+  - `plate` (string, required, min 3 characters)
+  - `capacity` (integer, required, min 1)
+  - `vehicleType` (string, required, one of: `"car"`, `"motorcycle"`, `"auto"`)
+
+**Responses:**
+
+- **201 Created**
+  ```json
+  {
+    "token": "<jwt_token>",
+    "captain": {
+      "_id": "<captain_id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "MP 09 UT 1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "socketId": null,
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+- **400 Bad Request** (Validation Error)
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "First name must be at least 3 characters long.",
+        "param": "fullname.firstname",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **400 Bad Request** (Duplicate Email)
+  ```json
+  {
+    "message": "Captain Already Exist."
+  }
+  ```
+
+---
+
