@@ -347,4 +347,140 @@ Registers a new captain in the system. On success, returns a JWT authentication 
   ```
 
 ---
+## Login Captain
+
+### `POST /captains/login`
+
+**Description:**  
+Authenticates a captain and returns a JWT token and the captain object.
+
+**Request Body:**
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "yourPassword123"
+}
+```
+
+**Responses:**
+
+- **200 OK**
+  ```json
+  {
+    "token": "<jwt_token>",
+    "captain": {
+      "_id": "<captain_id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "MP 09 UT 1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "socketId": null,
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+- **400 Bad Request** (Validation Error)
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid Email.",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized** (Invalid Credentials)
+  ```json
+  {
+    "message": "Invalid email or password."
+  }
+  ```
+
+---
+
+## Get Captain Profile
+
+### `GET /captains/profile`
+
+**Description:**  
+Returns the authenticated captain's profile.
+
+**Authentication:**  
+- Required.  
+- Send JWT token in the `token` cookie or as an `Authorization: Bearer <token>` header.
+
+**Responses:**
+
+- **200 OK**
+  ```json
+  {
+    "captain": {
+      "_id": "<captain_id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "red",
+        "plate": "MP 09 UT 1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "socketId": null,
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized." }
+  ```
+
+---
+
+## Logout Captain
+
+### `GET /captains/logout`
+
+**Description:**  
+Logs out the authenticated captain by blacklisting the token and clearing the cookie.
+
+**Authentication:**  
+- Required.  
+- Send JWT token in the `token` cookie or as an `Authorization: Bearer <token>` header.
+
+**Responses:**
+
+- **200 OK**
+  ```json
+  { "message": "Logout Successfully." }
+  ```
+
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized." }
+  ```
+
+---
 
